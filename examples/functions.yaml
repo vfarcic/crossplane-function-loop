@@ -1,0 +1,7 @@
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: dot-loop
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/dot-loop:v0.0.1

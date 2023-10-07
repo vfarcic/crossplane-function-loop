@@ -1,0 +1,8 @@
+apiVersion: nopexample.org/v1alpha1
+kind: XNopResource
+metadata:
+  name: test-resource
+spec:
+  namespaces:
+    - dev
+    - production
