@@ -1,7 +1,5 @@
 # Crossplane Function: Loop
 
-A [Crossplane] Composition Function template, for Go.
-
 ## What is this?
 
 This is a Crossplane Composition Function.
