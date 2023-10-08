@@ -26,10 +26,6 @@ spec:
               of an object. Servers should convert recognized schemas to the latest
               internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
-          example:
-            description: Example is an example field. Replace it with whatever input
-              you need. :)
-            type: string
           kind:
             description: 'Kind is a string value representing the REST resource this
               object represents. Servers may infer this from the endpoint the client
@@ -37,8 +33,44 @@ spec:
             type: string
           metadata:
             type: object
+          namePrefix:
+            type: string
+          namespacesExpr:
+            type: string
+          paths:
+            items:
+              type: string
+            type: array
+          resources:
+            items:
+              properties:
+                base:
+                  description: Base is the target resource that the patches will be
+                    applied on.
+                  type: object
+                  x-kubernetes-embedded-resource: true
+                  x-kubernetes-preserve-unknown-fields: true
+                name:
+                  description: A Name uniquely identifies this entry within its Composition's
+                    resources array. Names are optional but *strongly* recommended.
+                    When all entries in the resources array are named entries may
+                    added, deleted, and reordered as long as their names do not change.
+                    When entries are not named the length and order of the resources
+                    array should be treated as immutable. Either all or no entries
+                    must be named.
+                  type: string
+              required:
+              - base
+              type: object
+            type: array
+          valuesXrPath:
+            type: string
         required:
-        - example
+        - namePrefix
+        - namespacesExpr
+        - paths
+        - resources
+        - valuesXrPath
         type: object
     served: true
     storage: true

@@ -2,6 +2,6 @@
 apiVersion: pkg.crossplane.io/v1beta1
 kind: Function
 metadata:
-  name: dot-loop
+  name: loop
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/dot-loop:v0.0.1
+  package: 'c8n.io/vfarcic/crossplane-function-loop:v0.0.1'

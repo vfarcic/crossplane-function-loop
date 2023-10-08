@@ -11,15 +11,12 @@ spec:
   pipeline:
   - step: loop
     functionRef:
-      name: dot-loop
+      name: loop
     input:
       valuesXrPath: "spec.namespaces"
       namePrefix: "ns-"
       paths:
         - "spec.forProvider.manifest.metadata.name"
-      # namespaces:
-      #   - dev
-      #   - production
       resources:
         - base:
             apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -29,12 +26,4 @@ spec:
                 manifest:
                   apiVersion: v1
                   kind: Namespace
-          patches:
-          - fromFieldPath: spec.id
-            toFieldPath: metadata.name
-            transforms:
-            - string:
-                fmt: '%s-ns-production'
-              type: string
-          - fromFieldPath: spec.id
-            toFieldPath: spec.providerConfigRef.name
+
