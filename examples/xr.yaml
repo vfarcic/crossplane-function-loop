@@ -3,6 +3,7 @@ kind: XNopResource
 metadata:
   name: test-resource
 spec:
+  id: test-resource
   namespaces:
     - dev
     - production

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/crossplane/crossplane-runtime/pkg/errors"
 	"github.com/crossplane/crossplane-runtime/pkg/logging"
@@ -63,7 +64,7 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1beta1.RunFunctionRequ
 		return rsp, nil
 	}
 
-	// Iterate through namespaces and replace values in resources
+	// Iterate through values and replace them in resources
 	values, err := oxr.Resource.GetStringArray(in.ValuesXrPath)
 	if err != nil {
 		response.Fatal(rsp, errors.Wrapf(err, "cannot get values", req))
@@ -77,10 +78,23 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1beta1.RunFunctionRequ
 			response.Fatal(rsp, errors.Wrapf(err, "cannot get desired compose resource %q", *r.Name))
 			return rsp, nil
 		}
-		// TODO: Rewrite
 		for _, path := range in.Paths {
-			composed.SetString(path, value)
+			if strings.Contains(path, "=") {
+				pathSlice := strings.Split(path, "=")
+				path = strings.TrimSpace(pathSlice[0])
+				patchPath := strings.TrimSpace(pathSlice[1])
+				patchValue, err := oxr.Resource.GetString(patchPath)
+				if err != nil {
+					response.Fatal(rsp, errors.Wrapf(err, "cannot get values", req))
+					return rsp, nil
+				}
+				composed.SetString(path, patchValue)
+			} else {
+				composed.SetString(path, value)
+			}
 		}
+		composed.SetString("metadata.labels.function", "loop")
+		composed.SetString("metadata.labels.functionValue", value)
 		desired[resource.Name(name)] = &resource.DesiredComposed{Resource: composed}
 	}
 
@@ -92,3 +106,6 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1beta1.RunFunctionRequ
 
 	return rsp, nil
 }
+
+//     fromFieldPath: "spec.id"
+//     toFieldPath: "spec.providerConfigRef.name"

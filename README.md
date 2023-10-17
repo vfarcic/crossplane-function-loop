@@ -95,7 +95,7 @@ spec:
 ```bash
 go generate ./...
 
-export TAG=v0.0.1
+export TAG=v0.0.3
 
 docker image build --tag c8n.io/vfarcic/crossplane-function-loop:$TAG .
 
