@@ -72,12 +72,14 @@ func (f *Function) RunFunction(_ context.Context, req *fnv1beta1.RunFunctionRequ
 	}
 	for _, value := range values {
 		r := in.Resources[0]
-		name := fmt.Sprintf("%s%s", in.NamePrefix, value)
+		metadataName, _ := oxr.Resource.GetString("metadata.name")
+		name := fmt.Sprintf("%s-%s%s", metadataName, in.NamePrefix, value)
 		composed := composed.New()
 		if err := yaml.Unmarshal(r.Base.Raw, composed); err != nil {
 			response.Fatal(rsp, errors.Wrapf(err, "cannot get desired compose resource %q", *r.Name))
 			return rsp, nil
 		}
+		composed.SetString("metadata.name", name)
 		for _, path := range in.Paths {
 			if strings.Contains(path, "=") {
 				pathSlice := strings.Split(path, "=")
